@@ -21,7 +21,31 @@
             <a href="{% url 'about_book' pk=book.pk %}"><img src="{{ MEDIA_URL }}{{book.image_location}}" alt="IMage" class="img-fluid"></a>
           </div>
         {% endfor %}
+
       </div>
+      {% if books.has_other_pages %}
+        <ul class="row justify-content-center pagination">
+          {% if books.has_previous %}
+            <h1><a href="?page={{ books.previous_page_number }}">&laquo;</a></h1>
+          {% else %}
+            <li class="disabled"><span>&laquo;</span></li>
+          {% endif %}
+          {% for i in books.paginator.page_range %}
+            {% if books.number == i %}
+              <h1 class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></h1>
+            {% else %}
+              <h1><a href="?page={{ i }}">{{ i }}</a></h1>
+            {% endif %}
+          {% endfor %}
+          {% if books.has_next %}
+            <h1><a href="?page={{ books.next_page_number }}">&raquo;</a></h1>
+          {% else %}
+            <h1 class="disabled"><span>&raquo;</span></h1>
+          {% endif %}
+        </ul>
+      {% endif %}
     </div>
     </div>
+    </div>
+
     {% endblock %}

@@ -56,10 +56,10 @@
             <nav class="site-navigation position-relative text-right text-lg-center" role="navigation">
 
               <ul class="site-menu js-clone-nav mx-auto d-none d-lg-block">
-                <li><a href="">Home</a></li>
+                <li><a href="{% url 'home' %}">Home</a></li>
                 <li><a href="{% url 'all_books' %}">Find Books</a></li>
                 <li><a href="readbooks.html">Read Books</a></li>
-                <li><a href="services.html">Services</a></li>
+                <li><a href="{% url 'services' %}">Services</a></li>
               </ul>
             </nav>
           </div>
