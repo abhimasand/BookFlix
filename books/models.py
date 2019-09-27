@@ -4,13 +4,18 @@ from django.utils import timezone
 
 
 class Book(models.Model):
-    author = models.CharField(max_length=200)
-    title = models.CharField(max_length=200)
-    rating = models.CharField(max_length=200)
+    book_id = models.CharField(max_length=200,default = "")
+    goodreads_book_id = models.CharField(max_length=200,default = "")
+    published_date = models.CharField(max_length=200,default = "")
+    author = models.CharField(max_length=200,default = "")
+    title = models.CharField(max_length=200,default = "")
+    original_title = models.CharField(max_length=200,default = "")
+    rating = models.CharField(max_length=200,default = "")
+    description = models.TextField(default = "")
+    image_url = models.CharField(max_length=200,default = "")
+    image_location = models.CharField(max_length=200,default = "")
     status = models.CharField(max_length=200,default = "Not Read")
-    description = models.TextField()
-    published_date = models.DateTimeField(blank=True, null=True)
-
+    
     def publish(self):
         self.save()
 

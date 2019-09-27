@@ -1,0 +1,49 @@
+{% extends 'books/base.html' %}
+{% block content %}
+{% load static %}
+<div class=""  data-aos="fade">
+    <div class="container-fluid">
+      
+      <div class="row justify-content-center">
+        <div class="col-md-7">
+          <div class="row mb-5 site-section">
+            <div class="col-12 ">
+              <h2 class="site-section-heading text-center">About Book</h2>
+            </div>
+          </div>
+
+          <div class="row mb-5">
+            <div class="col-md-7">
+              <img src="{{ MEDIA_URL }}{{book.image_location}}" alt="Images" class="img-fluid">
+            </div>
+            <div class="col-md-4 ml-auto">
+              <h2>{{book.title}}</h2>
+              <p>{{book.description}}</p>
+              <h4>Book Details</h4>
+              <p></p>
+              <p><b>Launch Date: </b>{{book.published_date}}</p>
+              <p><b>Author Name: </b>{{book.author}}</p>
+              <p><b>Average Rating: </b>{{book.rating}}</p>
+              {% ifequal book.status "Read" %}
+              	<p><b>Status: </b><font color="green">{{book.status}}<font></p>
+              {% endifequal %}
+              {% ifequal book.status "Not Read" %}
+              	<p><b>Status: </b><font color="red">{{book.status}}<font></p>
+              {% endifequal %}
+              {% ifequal book.status "To Read" %}
+              	<p><b>Status: </b><font color="blue">{{book.status}}<font></p>
+              {% endifequal %}
+            </div>
+
+        </div>
+        <div class="row mb-3 site-section">
+            <div class="col-12 ">
+              <a href = "{% url 'add_to_wishlist' pk=book.pk %}" b><h1 class="text-center">Add to Wishlist</h1></a>
+            </div>
+          </div>
+        </div>
+    
+      </div>
+    </div>
+  </div>
+  {% endblock %}
