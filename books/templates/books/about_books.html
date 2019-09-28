@@ -12,8 +12,10 @@
             </div>
           </div>
 
-          <div class="row mb-5">
-            <div class="col-md-7">
+          <div class="row mb-5" id="lightgallery">
+
+            <div class="col-md-7" data-aos="fade" data-src="{{ MEDIA_URL }}{{book.image_location}}" data-sub-html="<h4>{{book.title}}</h4><p>{{book.description}}</p>">
+
               <img src="{{ MEDIA_URL }}{{book.image_location}}" alt="Images" class="img-fluid">
             </div>
             <div class="col-md-4 ml-auto">

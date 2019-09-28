@@ -1,6 +1,8 @@
 from django.shortcuts import render,redirect
 from .models import Book
 from django.core.paginator import Paginator
+from django.contrib.auth.views import LoginView as auth_login
+
 
 
 def home(request):
@@ -37,6 +39,18 @@ def add_to_wishlist(request,pk):
 def services(request):
     return render(request, 'books/services.html', {})
 
+def login(request):
+    if request.user.is_author():
+        return redirect('/')
+    elif request.user.is_reader():
+        return redirect('/')
+
+    defaults = {
+        'authentication_form': CustomAuthenticationForm,
+        'template_name': 'core/login.html',
+    }
+
+    return auth_login(request, **defaults)
 
 
 
