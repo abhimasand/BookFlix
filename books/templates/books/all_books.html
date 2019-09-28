@@ -9,12 +9,55 @@
         <div class="col-md-7">
           <div class="row mb-5">
             <div class="col-12 ">
+              {% if search_header %}
+              <h4 class="site-section-heading text-center">{{search_header}}</h4>
+              {% else %}
               <h2 class="site-section-heading text-center">Find New Books</h2>
+              {% endif %}
+              {% if focus_genre != "False" %}
+                <h2 class="site-section-heading text-center">{{focus_genre}}</h2>
+              {% endif %}
             </div>
           </div>
         </div>
 
       </div>
+      
+      {% if search_header %}
+
+      {% else %}
+      <div class="swiper-container images-carousel">
+        <div class="swiper-wrapper" >
+          {% for gen in genres %}
+            <div class="swiper-slide">
+              <div class="image-wrap" >
+                <div class="image-info">
+                  <h2 class="mb-3">{{gen.genre}}</h2>
+                  <a href="{% url 'sort_books_genre' request_genre=gen.genre %}" class="btn btn-outline-white py-2 px-4">Show Books</a>
+                </div>
+                <img src="{% static 'images/img_4.jpg' %}" alt="Image">
+              </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+
+
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-scrollbar"></div>
+
+    </div>
+
+    <div class="col-md-7">
+          <div class="row mb-5">
+            <div class="col-12 ">
+              <h2 class="site-section-heading text-center"></h2>
+            </div>
+          </div>
+        </div>
+    {% endif %}
       <div class="row">
         {% for book in books %}
           <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2 item" data-aos="fade" data-src="{{ MEDIA_URL }}{{book.image_location}}" data-sub-html="<h4>{{book.title}}</h4><p>{{book.description}}</p>">

@@ -38,6 +38,9 @@
   <link rel="stylesheet" type="text/css" href="{% static 'vendor/daterangepicker/daterangepicker.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+
+  <link href="{% static 'https://fonts.googleapis.com/css?family=Poppins' %}" rel="stylesheet" />
+  <link href="{% static 'css/search.css' %}" rel="stylesheet" />
     
   </head>
   <body>
@@ -70,6 +73,7 @@
               <ul class="site-menu js-clone-nav mx-auto d-none d-lg-block">
                 <li><a href="{% url 'home' %}">Home</a></li>
                 <li><a href="{% url 'all_books' %}">Find Books</a></li>
+                <li><a href="{% url 'search_books' %}">Search Books</a></li>
                 <li><a href="readbooks.html">Read Books</a></li>
                 <li><a href="{% url 'services' %}">Services</a></li>
               </ul>
@@ -146,6 +150,16 @@
   <script src="{% static 'vendor/daterangepicker/daterangepicker.js' %}"></script>
   <script src="{% static 'vendor/countdowntime/countdowntime.js' %}"></script>
   <script src="{% static 'js/main.js' %}"></script>
+
+  <script src="{% static 'js/extention/choices.js' %}"></script>
+    <script>
+      const choices = new Choices('[data-trigger]',
+      {
+        searchEnabled: false,
+        itemSelectText: '',
+      });
+
+    </script>
   
   <script>
     $(document).ready(function(){

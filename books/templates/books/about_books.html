@@ -12,11 +12,10 @@
             </div>
           </div>
 
-          <div class="row mb-5" id="lightgallery">
+          <div class="row mb-5">
 
-            <div class="col-md-7" data-aos="fade" data-src="{{ MEDIA_URL }}{{book.image_location}}" data-sub-html="<h4>{{book.title}}</h4><p>{{book.description}}</p>">
-
-              <img src="{{ MEDIA_URL }}{{book.image_location}}" alt="Images" class="img-fluid">
+            <div class="col-md-7" id = "lightgallery">
+              <img src="{{ MEDIA_URL }}{{book.image_location}}" alt="Images" class="img-fluid" data-aos="fade" data-src="{{ MEDIA_URL }}{{book.image_location}}" data-sub-html="<h4>{{book.title}}</h4><p>{{book.description}}</p>">
             </div>
             <div class="col-md-4 ml-auto">
               <h2>{{book.title}}</h2>
@@ -25,7 +24,9 @@
               <p></p>
               <p><b>Launch Date: </b>{{book.published_date}}</p>
               <p><b>Author Name: </b>{{book.author}}</p>
+              <p><b>Genre: </b>{{book.genres}}</p>
               <p><b>Average Rating: </b>{{book.rating}}</p>
+
               {% ifequal book.status "Read" %}
               	<p><b>Status: </b><font color="green">{{book.status}}<font></p>
               {% endifequal %}
@@ -35,12 +36,19 @@
               {% ifequal book.status "To Read" %}
               	<p><b>Status: </b><font color="blue">{{book.status}}<font></p>
               {% endifequal %}
+              {% ifequal book.status "Reading" %}
+                <p><b>Status: </b><font color="purple">{{book.status}}<font></p>
+                <p><b>Current Page: </b>{{book.current_page}}</p>
+              {% endifequal %}
+
             </div>
 
         </div>
         <div class="row mb-3 site-section">
             <div class="col-12 ">
               <a href = "{% url 'add_to_wishlist' pk=book.pk %}" b><h1 class="text-center">Add to Wishlist</h1></a>
+              <spacer>
+              <a href = "{% url 'currently_reading' pk=book.pk %}" b><h1 class="text-center">Currently Reading</h1></a>
             </div>
           </div>
         </div>

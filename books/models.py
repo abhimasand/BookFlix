@@ -15,9 +15,19 @@ class Book(models.Model):
     image_url = models.CharField(max_length=200,default = "")
     image_location = models.CharField(max_length=200,default = "")
     status = models.CharField(max_length=200,default = "Not Read")
+    genres = models.CharField(max_length=500,default = "")
+    current_page = models.CharField(max_length=10,default = "")
     
     def publish(self):
         self.save()
 
     def __str__(self):
         return self.title
+
+class Genres(models.Model):
+    genre = models.CharField(max_length=50,default = "")
+
+    def publish(self):
+        self.save()
+
+
