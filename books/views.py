@@ -18,94 +18,19 @@ genres = ['Fiction', 'Fantasy', 'Romance', 'Young Adult', 'Historical', 'Paranor
 
 
 
-def home(request):
-    print ("**************Going to the Home Page**************")
-    return render(request, 'books/home.html', {})
+class Home:
+    def home(request):
+        print ("**************Going to the Home Page**************")
+        return render(request, 'books/home.html', {})
 
-def search_books(request):
-    return render(request, 'books/search.html', {})
+class Search:
+    def search_books(request):
+        return render(request, 'books/search.html', {})
 
-def search(request):
-    query = request.GET.get('search_value')
-    book_list = Book.objects.filter(title__contains=query)
-    genres = Genres.objects.all()
-
-    page = request.GET.get('page', 1)
-
-    paginator = Paginator(book_list, 1000)
-    try:
-        books = paginator.page(page)
-    except PageNotAnInteger:
-        books = paginator.page(1)
-    except EmptyPage:
-        books = paginator.page(paginator.num_pages)
-
-    return render(request, 'books/all_books.html', {'books':books,'genres':genres,'focus_genre':"False",'search_header':f"Search Results For: {query}"})
-
-def all_books(request):
-    book_list = Book.objects.all()
-    genres = Genres.objects.all()
-    
-    page = request.GET.get('page', 1)
-
-    paginator = Paginator(book_list, 1000)
-    try:
-        books = paginator.page(page)
-    except PageNotAnInteger:
-        books = paginator.page(1)
-    except EmptyPage:
-        books = paginator.page(paginator.num_pages)
-
-    return render(request, 'books/all_books.html', {'books':books,'genres':genres,'focus_genre':"False"})
-
-def about_book(request,pk):
-    book = Book.objects.get(pk=pk)
-    return render(request, 'books/about_books.html', {'book':book})
-
-def add_to_wishlist(request,pk):
-    book = Book.objects.get(pk=pk)
-    book.status = "To Read"
-    book.save()
-    book.publish()
-    print (book.pk)
-    return redirect('about_book', pk=book.pk)
-
-def currently_reading(request,pk):
-    book = Book.objects.get(pk=pk)
-    book.status = "Reading"
-    book.save()
-    book.publish()
-    print (book.pk)
-    return redirect('about_book', pk=book.pk)
-
-def set_currently_reading_page(request,page,pk):
-    book = Book.objects.get(pk=pk)
-    book.current_page = page
-    book.save()
-    book.publish()
-    print (book.pk)
-    return redirect('about_book', pk=book.pk)
-
-def services(request):
-    return render(request, 'books/services.html', {})
-
-def login(request):
-    if request.user.is_author():
-        return redirect('/')
-    elif request.user.is_reader():
-        return redirect('/')
-
-    defaults = {
-        'authentication_form': CustomAuthenticationForm,
-        'template_name': 'core/login.html',
-    }
-
-    return auth_login(request, **defaults)
-
-def sort_books_genre(request,request_genre):
-    if request_genre in genres:
-        book_list = Book.objects.filter(genres__contains=request_genre)
-        genre = Genres.objects.all()
+    def search(request):
+        query = request.GET.get('search_value')
+        book_list = Book.objects.filter(title__contains=query)
+        genres = Genres.objects.all()
 
         page = request.GET.get('page', 1)
 
@@ -117,87 +42,177 @@ def sort_books_genre(request,request_genre):
         except EmptyPage:
             books = paginator.page(paginator.num_pages)
 
-        return render(request, 'books/all_books.html', {'books':books,'genres':genre,'focus_genre':request_genre})
-    else:
-        return redirect('all_books')
+        return render(request, 'books/all_books.html', {'books':books,'genres':genres,'focus_genre':"False",'search_header':f"Search Results For: {query}"})
 
-def select_user_preferences(request):
-    book_list = Book.objects.all()
+class Find_Books:
+    def all_books(request):
+        book_list = Book.objects.all()
+        genres = Genres.objects.all()
+        
+        page = request.GET.get('page', 1)
+
+        paginator = Paginator(book_list, 1000)
+        try:
+            books = paginator.page(page)
+        except PageNotAnInteger:
+            books = paginator.page(1)
+        except EmptyPage:
+            books = paginator.page(paginator.num_pages)
+
+        return render(request, 'books/all_books.html', {'books':books,'genres':genres,'focus_genre':"False"})
+
+    def sort_books_genre(request,request_genre):
+        if request_genre in genres:
+            book_list = Book.objects.filter(genres__contains=request_genre)
+            genre = Genres.objects.all()
+
+            page = request.GET.get('page', 1)
+
+            paginator = Paginator(book_list, 1000)
+            try:
+                books = paginator.page(page)
+            except PageNotAnInteger:
+                books = paginator.page(1)
+            except EmptyPage:
+                books = paginator.page(paginator.num_pages)
+
+            return render(request, 'books/all_books.html', {'books':books,'genres':genre,'focus_genre':request_genre})
+        else:
+            return redirect('all_books')
+
+class Book_Functions:
+    def about_book(request,pk,status=False):
+        book = Book.objects.get(pk=pk)
+        return render(request, 'books/about_books.html', {'book':book})
+
+    def add_to_wishlist(request,pk,status=False):
+        book = Book.objects.get(pk=pk)
+        book.status = "To Read"
+        book.current_page = 0
+        book.save()
+        book.publish()
+        print (book.pk)
+        return redirect('about_book', pk=book.pk)
+
+    def remove_from_wishlist(request,pk,status=False):
+        book = Book.objects.get(pk=pk)
+        book.status = "Not Read"
+        book.current_page = 0
+        book.save()
+        book.publish()
+        print (book.pk)
+        return redirect('about_book', pk=book.pk)
+
+
+    def currently_reading(request,pk,status=False):
+        book = Book.objects.get(pk=pk)
+        book.status = "Reading"
+        book.save()
+        book.publish()
+        print (book.pk)
+        return redirect('about_book', pk=book.pk)
+
+    def change_current_page(request,pk,status="In Progress"):
+
+        if status=="In Progress":
+            book = Book.objects.get(pk=pk)
+            return render(request, 'books/about_books.html', {'book':book,'flag':"In Progress"})
+        else:
+            book = Book.objects.get(pk=pk)
+            book.current_page = request.GET.get('new_page')
+            book.save()
+            book.publish()
+            print (book.pk)
+            return redirect('about_book', pk=book.pk)
+
+class Services:
+    def services(request):
+        return render(request, 'books/services.html', {})
+
+class Registration:
+    def login(request):
+        if request.user.auth():
+            return redirect('/')
+        elif request.user.is_reader():
+            return redirect('/')
+
+        defaults = {
+            'authentication_form': CustomAuthenticationForm,
+            'template_name': 'core/login.html',
+        }
+
+        return auth_login(request, **defaults)
+
+
+
+class User_Book_Data:
+    def select_user_preferences(request):
+        book_list = Book.objects.all()
+        
+        page = request.GET.get('page', 1)
+
+        paginator = Paginator(book_list, 1000)
+        try:
+            books = paginator.page(page)
+        except PageNotAnInteger:
+            books = paginator.page(1)
+        except EmptyPage:
+            books = paginator.page(paginator.num_pages)
+
+        return render(request, 'books/user_select_books.html', {"books":books})
+
+    def handle_selected_books(request):
+        print ("*****************************************************")
+        print (request.GET)
+        print ("*****************************************************")
+        try:
+            #books = request.post["selected-item-list"]
+            print (books)
+        except:
+            pass
+
+class Read_Books:
+    def read_books(request):
+        books = Book.objects.all()[:500]
+        return render(request, 'books/read_books.html', {'books':books})
+
+    def select_read_books(request):
+        books = Book.objects.all()[:500]
+        return render(request, 'books/read_books.html', {'books':books})
+
     
-    page = request.GET.get('page', 1)
+class Recommend_Books:
+    def predictions(request):
 
-    paginator = Paginator(book_list, 1000)
-    try:
-        books = paginator.page(page)
-    except PageNotAnInteger:
-        books = paginator.page(1)
-    except EmptyPage:
-        books = paginator.page(paginator.num_pages)
+        K.clear_session()
 
-    return render(request, 'books/user_select_books.html', {"books":books})
+        json_file = open('scripts/model.json', 'r')
+        loaded_model_json = json_file.read()
+        json_file.close()
+        loaded_model = model_from_json(loaded_model_json)
+        loaded_model.load_weights("scripts/model.h5")
+        print("Loaded model from disk")
+        loaded_model.compile('adam', 'mean_squared_error')
+        #get user_data
+        user_data = np.array([1 for i in range(10000)])
 
-def read_books(request):
-    books = Book.objects.all()[:500]
-    return render(request, 'books/read_books.html', {'books':books})
+        dataset = pd.read_csv('scripts/goodbooks-10k-master/ratings.csv')
+        book_data = np.array(list(set(dataset.book_id)))
+        books = pd.read_csv('scripts/goodbooks-10k-master/books.csv')
 
-def select_read_books(request):
-    books = Book.objects.all()[:500]
-    return render(request, 'books/read_books.html', {'books':books})
+        user = np.array(user_data) #[1,1,0,1,0,0,0......0,1,1]
+        predictions = loaded_model.predict([user, book_data])
+        predictions = np.array([a[0] for a in predictions])
+        recommended_book_ids = (-predictions).argsort()[:100]
 
-def handle_selected_books(request):
-    print ("*****************************************************")
-    print (request.GET)
-    print ("*****************************************************")
-    try:
-        #books = request.post["selected-item-list"]
-        print (books)
-    except:
-        pass
+        output = books[books['book_id'].isin(recommended_book_ids)]
 
-# def predict_books(loaded_model,user_data):
+        K.clear_session()
 
-#         dataset = pd.read_csv('scripts/goodbooks-10k-master/ratings.csv')
-#         book_data = np.array(list(set(dataset.book_id)))
-#         books = pd.read_csv('scripts/goodbooks-10k-master/books.csv')
-
-#         user = np.array(user_data) #[1,1,0,1,0,0,0......0,1,1]
-#         predictions = loaded_model.predict([user, book_data])
-#         predictions = np.array([a[0] for a in predictions])
-#         recommended_book_ids = (-predictions).argsort()[:100]
-
-#         return books[books['book_id'].isin(recommended_book_ids)]
-
-def predictions(request):
-
-    K.clear_session()
-
-    json_file = open('scripts/model.json', 'r')
-    loaded_model_json = json_file.read()
-    json_file.close()
-    loaded_model = model_from_json(loaded_model_json)
-    loaded_model.load_weights("scripts/model.h5")
-    print("Loaded model from disk")
-    loaded_model.compile('adam', 'mean_squared_error')
-    #get user_data
-    user_data = np.array([1 for i in range(10000)])
-
-    dataset = pd.read_csv('scripts/goodbooks-10k-master/ratings.csv')
-    book_data = np.array(list(set(dataset.book_id)))
-    books = pd.read_csv('scripts/goodbooks-10k-master/books.csv')
-
-    user = np.array(user_data) #[1,1,0,1,0,0,0......0,1,1]
-    predictions = loaded_model.predict([user, book_data])
-    predictions = np.array([a[0] for a in predictions])
-    recommended_book_ids = (-predictions).argsort()[:100]
-
-    output = books[books['book_id'].isin(recommended_book_ids)]
-
-    K.clear_session()
-
-    books = Book.objects.filter(goodreads_book_id__in = list(output.goodreads_book_id))
+        books = Book.objects.filter(goodreads_book_id__in = list(output.goodreads_book_id))
 
 
-    return render(request, 'books/all_books.html', {'books':books,'search_header':"Your Recommendations"})
+        return render(request, 'books/all_books.html', {'books':books,'search_header':"Your Recommendations"})
 
     
 #{% url 'sort_books_genre' request_genre=gen.genre %}
