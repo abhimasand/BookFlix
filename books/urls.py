@@ -20,6 +20,13 @@ urlpatterns = [
     path('services', views.services, name='services'),
     path('search_books', views.search_books, name='search_books'),
     path('search_books/search', views.search, name='search'),
+    path('read_books', views.read_books, name='read_books'),
+    path('read_books/select', views.select_read_books, name='select_read_books'),
+    path('read_books/handle_selected_books', views.handle_selected_books, name='handle_selected_books'),
+    path('predictions', views.predictions, name='predictions'),
+
+
+
 
     url( r'^login/$',auth_views.LoginView.as_view(template_name="books/login.html"), name="login"),
 

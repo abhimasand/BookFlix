@@ -1079,7 +1079,7 @@ a {
   transform: scale(1.2); }
 
 .swiper-container {
-  height: calc(100vh - 700px); }
+  height: calc(100vh - 192px); }
   .swiper-container .swiper-slide .image-wrap {
     display: block;
     overflow: hidden;

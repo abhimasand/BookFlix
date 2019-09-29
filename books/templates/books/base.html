@@ -26,6 +26,7 @@
 
   <link rel="stylesheet" href="{% static 'css/aos.css' %}">
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style_picker.css' %}">
 
   <link rel="icon" type="image/png" href="{% static 'images/icons/favicon.ico' %}"/>
   <link rel="stylesheet" type="text/css" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
@@ -72,9 +73,10 @@
 
               <ul class="site-menu js-clone-nav mx-auto d-none d-lg-block">
                 <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'predictions' %}">Recommended Books</a></li>
                 <li><a href="{% url 'all_books' %}">Find Books</a></li>
                 <li><a href="{% url 'search_books' %}">Search Books</a></li>
-                <li><a href="readbooks.html">Read Books</a></li>
+                <li><a href="{% url 'read_books' %}">Read Books</a></li>
                 <li><a href="{% url 'services' %}">Services</a></li>
               </ul>
             </nav>
@@ -142,6 +144,11 @@
   <script src="{% static 'js/jquery.mousewheel.min.js' %}"></script>
 
   <script src="{% static 'js/main.js' %}"></script>
+  <script src="{% static 'js/script.js' %}"></script>
+
+  <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>
+  <script src='http://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js'></script>
+  <script src='https://codesnips.co.uk/wp-content/uploads/2016/04/jquery.ui_.touch-punch.min_.js'></script>
 
   <script src="{% static 'vendor/animsition/js/animsition.min.js' %}"></script>
   <script src="{% static 'vendor/bootstrap/js/popper.js' %}"></script>

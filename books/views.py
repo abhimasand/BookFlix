@@ -2,13 +2,24 @@ from django.shortcuts import render,redirect
 from .models import Book, Genres
 from django.core.paginator import Paginator
 from django.contrib.auth.views import LoginView as auth_login
+import tensorflow as tf
+import keras
+import numpy as np
+import pandas as pd
+from keras.models import Model
+from keras.models import model_from_json
+from keras import backend as K
+
 
 genres = ['Fiction', 'Fantasy', 'Romance', 'Young Adult', 'Historical', 'Paranormal', 'Mystery', 'Nonfiction', 'Science Fiction', 
 'Historical Fiction', 'Classics', 'Contemporary', 'Childrens', 'Cultural', 'Literature', 'Sequential Art', 'Thriller', 'European Literature', 
 'Religion', 'History', 'Biography', 'Humor', 'Horror', 'Novels', 'Adventure', 'Crime', 'Contemporary Romance', 'Autobiography', 'Philosophy', 
 'War', 'Short Stories', 'Christian', 'Paranormal Romance', 'Vampires', 'Comics', 'Womens Fiction', 'Memoir', 'Chick Lit', 'Erotica', 'Science']
 
+
+
 def home(request):
+    print ("**************Going to the Home Page**************")
     return render(request, 'books/home.html', {})
 
 def search_books(request):
@@ -125,6 +136,70 @@ def select_user_preferences(request):
 
     return render(request, 'books/user_select_books.html', {"books":books})
 
+def read_books(request):
+    books = Book.objects.all()[:500]
+    return render(request, 'books/read_books.html', {'books':books})
+
+def select_read_books(request):
+    books = Book.objects.all()[:500]
+    return render(request, 'books/read_books.html', {'books':books})
+
+def handle_selected_books(request):
+    print ("*****************************************************")
+    print (request.GET)
+    print ("*****************************************************")
+    try:
+        #books = request.post["selected-item-list"]
+        print (books)
+    except:
+        pass
+
+# def predict_books(loaded_model,user_data):
+
+#         dataset = pd.read_csv('scripts/goodbooks-10k-master/ratings.csv')
+#         book_data = np.array(list(set(dataset.book_id)))
+#         books = pd.read_csv('scripts/goodbooks-10k-master/books.csv')
+
+#         user = np.array(user_data) #[1,1,0,1,0,0,0......0,1,1]
+#         predictions = loaded_model.predict([user, book_data])
+#         predictions = np.array([a[0] for a in predictions])
+#         recommended_book_ids = (-predictions).argsort()[:100]
+
+#         return books[books['book_id'].isin(recommended_book_ids)]
+
+def predictions(request):
+
+    K.clear_session()
+
+    json_file = open('scripts/model.json', 'r')
+    loaded_model_json = json_file.read()
+    json_file.close()
+    loaded_model = model_from_json(loaded_model_json)
+    loaded_model.load_weights("scripts/model.h5")
+    print("Loaded model from disk")
+    loaded_model.compile('adam', 'mean_squared_error')
+    #get user_data
+    user_data = np.array([1 for i in range(10000)])
+
+    dataset = pd.read_csv('scripts/goodbooks-10k-master/ratings.csv')
+    book_data = np.array(list(set(dataset.book_id)))
+    books = pd.read_csv('scripts/goodbooks-10k-master/books.csv')
+
+    user = np.array(user_data) #[1,1,0,1,0,0,0......0,1,1]
+    predictions = loaded_model.predict([user, book_data])
+    predictions = np.array([a[0] for a in predictions])
+    recommended_book_ids = (-predictions).argsort()[:100]
+
+    output = books[books['book_id'].isin(recommended_book_ids)]
+
+    K.clear_session()
+
+    books = Book.objects.filter(goodreads_book_id__in = list(output.goodreads_book_id))
+
+
+    return render(request, 'books/all_books.html', {'books':books,'search_header':"Your Recommendations"})
+
+    
 #{% url 'sort_books_genre' request_genre=gen.genre %}
 
 

@@ -1,0 +1,41 @@
+{% extends 'books/base.html' %}
+{% block content %}
+{% load static %}
+<div class="site-section"  data-aos="fade">
+    <div class="container-fluid">
+      
+      <div class="row justify-content-center">
+        
+        <div class="col-md-7">
+          <div class="row mb-5">
+            <div class="col-12 ">
+              <h2 class="site-section-heading text-center">Find New Books</h2>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row mb-3 site-section">
+            <div class="col-12 ">
+              <a href = "{% url 'select_read_books' %}" b><h1 class="text-center">Add Books to Read Books</h1></a>
+            </div>
+      </div>
+
+      <p class="selected-items">You have selected the following images: <span id="selected-item-list"></span></p>
+
+      <form action = "{% url 'select_read_books' %}">
+      <button action = "{% url 'select_read_books' %}" type = "submit">Submit Books</button>
+      <div class="row" id="selectable">
+        {% for book in books %}
+          <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
+            <img src="{{ MEDIA_URL }}{{book.image_location}}" class="ui-widget-content"  width="100%",height = "100%">
+          </div>
+        {% endfor %}
+      </div>
+    </form> 
+    </div>
+    </div>
+    </div>
+
+    {% endblock %}
