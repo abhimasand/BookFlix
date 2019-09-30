@@ -27,7 +27,7 @@
 
       {% else %}
       <div class="swiper-container images-carousel">
-        <div class="swiper-wrapper" >
+        <div class="swiper-wrapper">
           {% for gen in genres %}
             <div class="swiper-slide">
               <div class="image-wrap" >
@@ -58,14 +58,17 @@
           </div>
         </div>
     {% endif %}
-      <div class="row">
+      
+      <div class="row book-gallery">
         {% for book in books %}
-          <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2 item" data-aos="fade" data-src="{{ MEDIA_URL }}{{book.image_location}}" data-sub-html="<h4>{{book.title}}</h4><p>{{book.description}}</p>">
-            <a href="{% url 'about_book' pk=book.pk %}"><img src="{{ MEDIA_URL }}{{book.image_location}}" alt="IMage" class="img-fluid" width="100%",height = "80%"></a>
+          <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2 item my-3" data-aos="fade" data-src="{{ MEDIA_URL }}{{book.image_location}}" data-sub-html="<h4>{{book.title}}</h4><p>{{book.description}}</p>">
+            <a href="{% url 'about_book' pk=book.pk %}">
+              <img src="{{ MEDIA_URL }}{{book.image_location}}" alt="IMage" class="img-fluid">
+            </a>
           </div>
         {% endfor %}
-
       </div>
+      
       {% if books.has_other_pages %}
         <ul class="row justify-content-center pagination">
           {% if books.has_previous %}

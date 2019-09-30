@@ -1079,7 +1079,7 @@ a {
   transform: scale(1.2); }
 
 .swiper-container {
-  height: calc(100vh - 192px); }
+  height: calc(100vh - 300px); }
   .swiper-container .swiper-slide .image-wrap {
     display: block;
     overflow: hidden;
@@ -1165,4 +1165,34 @@ a {
   background: #20c997; }
 
 #lightgallery .item {
-  margin-bottom: 30px; }
+  margin-bottom: 30px; 
+}
+
+.item img {
+  height: 310px;
+  object-fit: cover;
+  width: 100%;
+}
+
+@media (max-width: 992px) {
+  .item img {
+    height: 370px;
+  }
+}
+
+@media (max-width: 768px) {
+  .item img {
+    height: 420px;
+  }
+}
+
+@media (max-width: 576px) {
+  .row.book-gallery {
+    margin: 15px; 
+  }
+  .item img {
+    height: 470px;
+  }
+}
+
+
