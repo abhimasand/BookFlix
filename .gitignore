@@ -2,10 +2,8 @@
 *~
 __pycache__
 myvenv
-db.sqlite3
+
 /static
 .DS_Store
-/scripts/book_data.csv
-/scripts/goodbooks-10k-master
 /scripts/output_with_8000_desc_genre.csv
 /scripts/output_with_8000_desc.csv
