@@ -140,9 +140,11 @@ class Registration:
     def register(request):
         if request.method == "POST":
             form = UserCreationForm(request.POST)
+            print (form.as_p())
             if form.is_valid():
                 user = form.save()
                 username = form.cleaned_data.get('username')
+                print (form.cleaned_data.get('password'),form.cleaned_data.get('password1'),form.cleaned_data.get('password2'))
                 messages.success(request, f"New account created: {username}")
                 login(request, user)
                 return redirect("home")
@@ -257,13 +259,6 @@ class Recommend_Books:
 
     
 #{% url 'sort_books_genre' request_genre=gen.genre %}
-
-
-
-
-
-
-
 
 
 
