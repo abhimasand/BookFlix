@@ -88,7 +88,9 @@
               <ul class="site-menu js-clone-nav ml-auto list-unstyled d-flex text-right mb-0" data-class="social">
                 <li>
                   {% if user.is_authenticated%}
-                    <a href="" class="pl-0 pr-3">Username</span></a>
+                    <a href="" class="pl-0 pr-3">{{ user.get_username }}</span></a>
+                    <a href="{% url 'logout' %}" class="pl-0 pr-3">Logout</span></a>
+
                   {% else %}
                     <a href="{% url 'login' %}" class="pl-0 pr-3">Login/Register</span></a>
                   {% endif %}

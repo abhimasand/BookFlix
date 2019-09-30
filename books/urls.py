@@ -7,7 +7,6 @@ from django.contrib import admin
 from django.conf.urls import url
 from django.contrib.auth import views as auth_views
 
-from .forms import CustomAuthenticationForm
 
 urlpatterns = [
     path('', views.Home.home, name='home'),
@@ -35,9 +34,9 @@ urlpatterns = [
     path('predictions', views.Recommend_Books.predictions, name='predictions'),
 
 
-
-
-    url( r'^login/$',auth_views.LoginView.as_view(template_name="books/login.html"), name="login"),
+    path("login/", views.Registration.login_request, name="login"),
+    path("register/", views.Registration.register, name="register"),
+    path("logout/", views.Registration.logout_request, name="logout"),
 
 
 
