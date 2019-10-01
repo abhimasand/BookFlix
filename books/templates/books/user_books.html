@@ -1,0 +1,77 @@
+{% extends 'books/base.html' %}
+{% block content %}
+{% load static %}
+<div class="site-section"  data-aos="fade">
+    <div class="container-fluid">
+      
+      <div class="row justify-content-center">
+        
+        <div class="col-md-7">
+          <div class="row mb-5">
+            <div class="col-12 ">
+              <h2 class="site-section-heading text-center">Find New Books</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+    <div class="row mb-3 site-section">
+            <div class="col-12 ">
+              <a href = "{% url 'view_currently_reading_books' %}" b><h1 class="text-center">Read Books</h1></a>
+              <a href = "{% url 'view_wishlisted_books' %}" b><h1 class="text-center">Wishlisted Books</h1></a>
+              <a href = "{% url 'view_currently_reading_books' %}" b><h1 class="text-center">Currently Reading Books</h1></a>
+            </div>
+      </div>
+    <div class="row mb-3 site-section">
+            <div class="col-12 ">
+              <a href = "{% url 'select_read_books' %}" b><h3 class="text-center">Add Books to Read Books</h3></a>
+            </div>
+      </div>
+      
+    <div class="col-md-7">
+          <div class="row mb-5">
+            <div class="col-12 ">
+              <h2 class="site-section-heading text-center"></h2>
+            </div>
+          </div>
+        </div>
+      
+      <div class="row book-gallery">
+        {% for book in books %}
+          <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2 item my-3" data-aos="fade" data-src="{{ MEDIA_URL }}{{book.image_location}}" data-sub-html="<h4>{{book.title}}</h4><p>{{book.description}}</p>">
+            <a href="{% url 'about_book' pk=book.pk %}">
+              <img src="{{ MEDIA_URL }}{{book.image_location}}" alt="IMage" class="img-fluid">
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+      
+      {% if books.has_other_pages %}
+        <ul class="row justify-content-center pagination">
+          {% if books.has_previous %}
+            <h1><a href="?page={{ books.previous_page_number }}">&laquo;</a></h1>
+          {% else %}
+            <li class="disabled"><span>&laquo;</span></li>
+          {% endif %}
+          {% for i in books.paginator.page_range %}
+            {% if books.number == i %}
+              <h1 class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></h1>
+            {% else %}
+              <h1><a href="?page={{ i }}">{{ i }}</a></h1>
+            {% endif %}
+          {% endfor %}
+          {% if books.has_next %}
+            <h1><a href="?page={{ books.next_page_number }}">&raquo;</a></h1>
+          {% else %}
+            <h1 class="disabled"><span>&raquo;</span></h1>
+          {% endif %}
+        </ul>
+      {% endif %}
+    </div>
+    </div>
+    </div>
+
+    {% endblock %}
