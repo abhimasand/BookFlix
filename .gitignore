@@ -7,3 +7,4 @@ myvenv
 .DS_Store
 /scripts/output_with_8000_desc_genre.csv
 /scripts/output_with_8000_desc.csv
+.vscode
