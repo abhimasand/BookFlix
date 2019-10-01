@@ -1201,3 +1201,19 @@ a {
 .swiper-container.find-books-swipper {
   height: calc(100vh - 500px);
 }
+
+.item.selectable-book div {
+  height: 100%;
+  width: 100%;
+  cursor: pointer;
+  padding: 0;
+  background-color: rgba(111, 111, 111, 0.5);
+}
+
+.selectable-book img {
+  transition: 0.3s all ease-in;
+}
+
+.selectable-book.selected img {
+  padding: 20px;
+}
