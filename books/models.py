@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import AbstractUser
 
 
 class Book(models.Model):
@@ -26,6 +27,16 @@ class Book(models.Model):
 
 class Genres(models.Model):
     genre = models.CharField(max_length=50,default = "")
+
+    def publish(self):
+        self.save()
+
+class CustomUser():
+    username = models.CharField(('username'), unique=True)
+    date_joined = models.DateTimeField(default=timezone.now)
+    liked_books = []
+    wishlisted_books = []
+    not_liked_books = []
 
     def publish(self):
         self.save()
