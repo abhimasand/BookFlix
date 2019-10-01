@@ -18,24 +18,12 @@ from keras.models import Model
 from keras.models import model_from_json
 from keras import backend as K
 
-K.clear_session()
-
-with open('scripts/model.json', 'r') as json_file:
-    loaded_model_json = json_file.read()
-
-loaded_model = model_from_json(loaded_model_json)
-loaded_model.load_weights("scripts/model.h5")
-print("Loaded model from disk")
-loaded_model.compile('adam', 'mean_squared_error')
-
 genres = ['Fiction', 'Fantasy', 'Romance', 'Young Adult', 'Historical', 'Paranormal', 'Mystery', 'Nonfiction', 'Science Fiction', 
 'Historical Fiction', 'Classics', 'Contemporary', 'Childrens', 'Cultural', 'Literature', 'Sequential Art', 'Thriller', 'European Literature', 
 'Religion', 'History', 'Biography', 'Humor', 'Horror', 'Novels', 'Adventure', 'Crime', 'Contemporary Romance', 'Autobiography', 'Philosophy', 
 'War', 'Short Stories', 'Christian', 'Paranormal Romance', 'Vampires', 'Comics', 'Womens Fiction', 'Memoir', 'Chick Lit', 'Erotica', 'Science']
 
-json_file = open('scripts/model.json', 'r')
-loaded_model_json = json_file.read()
-json_file.close()
+
 
 class Home:
     def home(request):
@@ -231,7 +219,6 @@ class Read_Books:
         books = Book.objects.all()[:500]
         return render(request, 'books/read_books.html', {'books':books})
 
-<<<<<<< HEAD
     def view_read_books(request):
         pass
     def view_wishlited_books(request):
@@ -245,16 +232,15 @@ class Recommend_Books:
 
         K.clear_session()
 
-
+        json_file = open('scripts/model.json', 'r')
+        loaded_model_json = json_file.read()
+        json_file.close()
+        
         loaded_model = model_from_json(loaded_model_json)
         loaded_model.load_weights("scripts/model.h5")
         print("Loaded model from disk")
         loaded_model.compile('adam', 'mean_squared_error')
-=======
-        
-class Recommend_Books:
-    def predictions(request):
->>>>>>> 6f2bd872f6a5bdb6d6aa32e12bba6bfc29ea9c01
+
         #get user_data
         user_data = np.array([1 for i in range(10000)])
 
