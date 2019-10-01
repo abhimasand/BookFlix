@@ -7,7 +7,8 @@ from django.core.paginator import Paginator
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import logout, authenticate, login
 from django.contrib import messages
-
+from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 
 import tensorflow as tf
 import keras
@@ -17,6 +18,15 @@ from keras.models import Model
 from keras.models import model_from_json
 from keras import backend as K
 
+K.clear_session()
+
+with open('scripts/model.json', 'r') as json_file:
+    loaded_model_json = json_file.read()
+
+loaded_model = model_from_json(loaded_model_json)
+loaded_model.load_weights("scripts/model.h5")
+print("Loaded model from disk")
+loaded_model.compile('adam', 'mean_squared_error')
 
 genres = ['Fiction', 'Fantasy', 'Romance', 'Young Adult', 'Historical', 'Paranormal', 'Mystery', 'Nonfiction', 'Science Fiction', 
 'Historical Fiction', 'Classics', 'Contemporary', 'Childrens', 'Cultural', 'Literature', 'Sequential Art', 'Thriller', 'European Literature', 
@@ -204,15 +214,11 @@ class User_Book_Data:
 
         return render(request, 'books/user_select_books.html', {"books":books})
 
+    @csrf_exempt
     def handle_selected_books(request):
-        print ("*****************************************************")
-        print (request.GET)
-        print ("*****************************************************")
-        try:
-            #books = request.post["selected-item-list"]
-            print (books)
-        except:
-            pass
+        selected_books = request.POST.getlist("selected[]")
+        print(selected_books)
+        return HttpResponse('Success')
 
 class Read_Books:
     def read_books(request):
@@ -223,19 +229,9 @@ class Read_Books:
         books = Book.objects.all()[:500]
         return render(request, 'books/read_books.html', {'books':books})
 
-    
+        
 class Recommend_Books:
     def predictions(request):
-
-        K.clear_session()
-
-        json_file = open('scripts/model.json', 'r')
-        loaded_model_json = json_file.read()
-        json_file.close()
-        loaded_model = model_from_json(loaded_model_json)
-        loaded_model.load_weights("scripts/model.h5")
-        print("Loaded model from disk")
-        loaded_model.compile('adam', 'mean_squared_error')
         #get user_data
         user_data = np.array([1 for i in range(10000)])
 

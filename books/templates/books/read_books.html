@@ -19,7 +19,7 @@
 
 <div class="header" id="myHeader">
   <div align="right">
-  <button class="button" id="myHeader" action = "{% url 'select_read_books' %}"><h2>Next</h2></button> 
+  <button class="button" id="submitSelected"><h2>Next</h2></button> 
   </div>
 </div>
 
@@ -44,17 +44,19 @@
             </div>
       </div>
 
-      <p class="selected-items">You have selected the following images: <span id="selected-item-list"></span></p>
-
       <form action = "{% url 'select_read_books' %}">
       <button action = "{% url 'select_read_books' %}" type = "submit">Submit Books</button>
-      <div class="row" id="selectable">
+      
+      <div class="row" id="selectables">
         {% for book in books %}
-          <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-            <img src="{{ MEDIA_URL }}{{book.image_location}}" class="ui-widget-content"  width="100%",height = "100%">
+          <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2 item selectable-book my-3" id="{{ book.pk }}">
+            <div>
+              <img src="{{ MEDIA_URL }}{{book.image_location}}" class="img-fluid">
+            </div>
           </div>
         {% endfor %}
       </div>
+
     </form> 
     </div>
     </div>
