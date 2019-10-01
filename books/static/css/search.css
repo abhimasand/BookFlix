@@ -14,6 +14,7 @@ html {
  */
 body {
   margin: 0;
+  
 }
 
 /**
@@ -814,12 +815,15 @@ legend {
   min-height: 100vh;
   display: -ms-flexbox;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color:white;
+  font-size: 30px;
   -ms-flex-pack: center;
       justify-content: center;
   -ms-flex-align: center;
       align-items: center;
   font-family: 'Poppins', sans-serif;
-  background-color: #ffffff;
   background-size: cover;
   background-position: center center;
   padding: 15px;

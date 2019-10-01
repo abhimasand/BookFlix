@@ -1,7 +1,8 @@
 {% extends 'books/base.html' %}
 {% block content %}
 {% load static %}
-<div class="s003">
+<div class="s003 background-im text-center">
+      <h1>Search Books</h1>
       <form action="{% url 'search' %}" method="get">
         <div class="inner-form" >
           <div class="input-field second-wrap">
@@ -18,5 +19,9 @@
       </form>
     </div>
 
-      
+<style>
+.background-im{
+  background-image: url("{% static 'images/coffee_book.jpg' %}")
+}     
+</style>
 {% endblock %}
