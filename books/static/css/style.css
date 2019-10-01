@@ -1079,8 +1079,10 @@ a {
   transform: scale(1.2); }
 
 .swiper-container {
-  height: calc(100vh - 300px); }
-  .swiper-container .swiper-slide .image-wrap {
+  height: calc(100vh - 192px); 
+}
+
+.swiper-container .swiper-slide .image-wrap {
     display: block;
     overflow: hidden;
     position: absolute;
@@ -1196,3 +1198,6 @@ a {
 }
 
 
+.swiper-container.find-books-swipper {
+  height: calc(100vh - 500px);
+}
