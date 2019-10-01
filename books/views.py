@@ -23,7 +23,9 @@ genres = ['Fiction', 'Fantasy', 'Romance', 'Young Adult', 'Historical', 'Paranor
 'Religion', 'History', 'Biography', 'Humor', 'Horror', 'Novels', 'Adventure', 'Crime', 'Contemporary Romance', 'Autobiography', 'Philosophy', 
 'War', 'Short Stories', 'Christian', 'Paranormal Romance', 'Vampires', 'Comics', 'Womens Fiction', 'Memoir', 'Chick Lit', 'Erotica', 'Science']
 
-
+json_file = open('scripts/model.json', 'r')
+loaded_model_json = json_file.read()
+json_file.close()
 
 class Home:
     def home(request):
@@ -223,15 +225,20 @@ class Read_Books:
         books = Book.objects.all()[:500]
         return render(request, 'books/read_books.html', {'books':books})
 
+    def view_read_books(request):
+        pass
+    def view_wishlited_books(request):
+        pass
+    def view_currently_reading_books(request):
+        pass
+
     
 class Recommend_Books:
     def predictions(request):
 
         K.clear_session()
 
-        json_file = open('scripts/model.json', 'r')
-        loaded_model_json = json_file.read()
-        json_file.close()
+
         loaded_model = model_from_json(loaded_model_json)
         loaded_model.load_weights("scripts/model.h5")
         print("Loaded model from disk")
