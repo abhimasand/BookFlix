@@ -14,9 +14,28 @@
 
           <div class="row mb-5">
             <div class="col-md-4" id = "lightgallery">
+              {%if book.status %}
+              <img src="{{ MEDIA_URL }}{{book.book.image_location}}" alt="Images" class="img-fluid" data-aos="fade" data-src="{{ MEDIA_URL }}{{book.book.image_location}}" data-sub-html="<h4>{{book.book.title}}</h4><p>{{book.book.description}}</p>">
+            </div>
+            <div class="col-md-8 ml-auto">
+
+              <h2>{{book.book.title}}</h2>
+              <br>
+              <p>{{book.book.description}}</p>
+              <br>
+              <h4>Book Details</h4>
+              <br>
+              <p><b>Launch Date: </b>{{book.book.published_date}}</p>
+              <p><b>Author Name: </b>{{book.book.author}}</p>
+              <p><b>Genre: </b>{{book.book.genres}}</p>
+              <p><b>Average Rating: </b>{{book.book.rating}}</p>
+
+              {%else%}
+
               <img src="{{ MEDIA_URL }}{{book.image_location}}" alt="Images" class="img-fluid" data-aos="fade" data-src="{{ MEDIA_URL }}{{book.image_location}}" data-sub-html="<h4>{{book.title}}</h4><p>{{book.description}}</p>">
             </div>
             <div class="col-md-8 ml-auto">
+
               <h2>{{book.title}}</h2>
               <br>
               <p>{{book.description}}</p>
@@ -27,6 +46,9 @@
               <p><b>Author Name: </b>{{book.author}}</p>
               <p><b>Genre: </b>{{book.genres}}</p>
               <p><b>Average Rating: </b>{{book.rating}}</p>
+
+              {%endif%}
+
 
               {% ifequal book.status "Read" %}
               	<p><b>Status: </b><font color="green">{{book.status}}<font></p>
@@ -48,6 +70,7 @@
               {% endif %}
             </div>
 
+        {% if user.is_authenticated %}
         </div>
         <div class="row mb-3 site-section">
             <div class="col-12 ">
@@ -71,6 +94,7 @@
             </div>
           </div>
         </div>
+        {% endif %}
     
       </div>
     </div>

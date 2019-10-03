@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from .models import Book, Genres, User_Book_Reading, User_Book_Wishlisted, User_Book_Currently_Reading
+from .models import Book, Genres, User_Book_Reading, User_Book_Wishlisted, User_Book_Currently_Reading, Intermediate_Book
 from .forms import NewUserForm
 
 from django.core.paginator import Paginator
@@ -111,33 +111,43 @@ class Book_Functions:
                     return render(request, 'books/about_books.html', {'book':book})
 
 
-################################################################################################################################
-################################################################################################################################
-################################################################################################################################
-
-#CHANGE MODEL STORING, TRY TO MAKE A COPY OR SOMETHING OF THE BOOK IN MANY-TO-MANY Field
 
     def add_to_wishlist(request,pk,status=False):
-        book = Book.objects.get(pk=pk)
+        try:
+            
+            book = Intermediate_Book.objects.get(user__pk=request.user.pk,book__pk=pk)
+        except Exception as e:
+            print (str(e))
+
+            book1 = Book.objects.get(pk=pk)
+            book = Intermediate_Book(user = request.user,book=book1,current_page = 0,status = "To Read")
+
+        print (book)
         book.status = "To Read"
         book.current_page = 0
         book.save()
+        print (book,book.status,book.current_page)
         output = User_Book_Wishlisted.objects.get(user__pk=request.user.pk)
         output.book.add(book)
+        print (output)
+        output.save()
+
         try:
-            output = User_Book_Currently_Reading.objects.get(user__pk=request.user.pk)
-            output.book.remove(book)
+            output_currently_reading = User_Book_Currently_Reading.objects.get(user__pk=request.user.pk)
+            output_currently_reading.book.remove(book)
+            output_currently_reading.save()
         except Exception as e:
             print (str(e))
         try:
-            output = User_Book_Reading.objects.get(user__pk=request.user.pk)
-            output.book.remove(book)
+            output_reading = User_Book_Reading.objects.get(user__pk=request.user.pk)
+            output_reading.book.remove(book)
+            output_reading.save()
         except Exception as e:
             print (str(e))
         return redirect('about_book', pk=book.pk)
 
     def remove_from_wishlist(request,pk,status=False):
-        book = Book.objects.get(pk=pk)
+        book = Intermediate_Book.objects.get(user__pk=request.user.pk,pk=pk)
         book.status = "Not Read"
         book.current_page = 0
         book.save()
@@ -151,9 +161,15 @@ class Book_Functions:
 
 
     def currently_reading(request,pk,status=False):
-        book = Book.objects.get(pk=pk)
+        try:
+            book = Intermediate_Book.objects.get(user__pk=request.user.pk,pk=pk)
+        except:
+
+            book1 = Book.objects.get(pk=pk)
+            book = Intermediate_Book(user = request.user,book=book1,current_page = 0,status = "Reading")
         book.status = "Reading"
         book.save()
+        print (book)
         output = User_Book_Currently_Reading.objects.get(user__pk=request.user.pk)
         output.book.add(book)
         try:
@@ -169,30 +185,22 @@ class Book_Functions:
         return redirect('about_book', pk=book.pk)
 
     def remove_currently_reading(request,pk,status=False):
-        book = Book.objects.get(pk=pk)
+        book = Intermediate_Book.objects.get(user__pk=request.user.pk,pk=pk)
         book.status = "Reading"
-        print (book.pk)
+        book.save()
         output = User_Book_Currently_Reading.objects.get(user__pk=request.user.pk)
         output.book.remove(book)
         return redirect('about_book', pk=book.pk)
 
-
-################################################################################################################################
-
-
-
-
     def change_current_page(request,pk,status="In Progress"):
 
         if status=="In Progress":
-            book = Book.objects.get(pk=pk)
+            book = Intermediate_Book.objects.get(user__pk=request.user.pk,pk=pk)
             return render(request, 'books/about_books.html', {'book':book,'flag':"In Progress"})
         else:
-            output = User_Book_Currently_Reading.objects.get(user__pk=request.user.pk)
-            book = output.book.get(pk=pk)
+            book = Intermediate_Book.objects.get(user__pk=request.user.pk,pk=pk)
             book.current_page = request.GET.get('new_page')
             book.save()
-            output.book.add(book)
             return redirect('about_book', pk=book.pk)
 
 class Services:
@@ -207,15 +215,16 @@ class Registration:
             if form.is_valid():
                 user = form.save()
                 username = form.cleaned_data.get('username')
-                print (form.cleaned_data.get('password'),form.cleaned_data.get('password1'),form.cleaned_data.get('password2'))
                 messages.success(request, f"New account created: {username}")
-                login(request, user)
                 user_data_1 = User_Book_Reading(user=user)
                 user_data_1.save()
                 user_data_2 = User_Book_Wishlisted(user=user)
                 user_data_2.save()
                 user_data_3 = User_Book_Currently_Reading(user=user)
                 user_data_3.save()
+                login(request, user)
+                
+                print (user,user_data_1)
                 return redirect("home")
 
             else:
@@ -258,26 +267,12 @@ class Registration:
 
 
 class User_Book_Data:
-    # def select_user_preferences(request):
-    #     book_list = Book.objects.all()
-        
-    #     page = request.GET.get('page', 1)
-
-    #     paginator = Paginator(book_list, 1000)
-    #     try:
-    #         books = paginator.page(page)
-    #     except PageNotAnInteger:
-    #         books = paginator.page(1)
-    #     except EmptyPage:
-    #         books = paginator.page(paginator.num_pages)
-
-    #     return render(request, 'books/user_select_books.html', {"books":books})
 
     def view_read_books(request):
 
         output = User_Book_Reading.objects.get(user__pk=request.user.pk)
         queryset = output.book.all()
-        books = Book.objects.filter(goodreads_book_id__in = [e.goodreads_book_id for e in queryset])
+        books = Book.objects.filter(goodreads_book_id__in = [e.book.goodreads_book_id for e in queryset])
         return render(request, 'books/user_books.html', {'books':books})
 
     
@@ -285,13 +280,13 @@ class User_Book_Data:
 
         output = User_Book_Wishlisted.objects.get(user__pk=request.user.pk)
         queryset = output.book.all()
-        books = Book.objects.filter(goodreads_book_id__in = [e.goodreads_book_id for e in queryset])
+        books = Book.objects.filter(goodreads_book_id__in = [e.book.goodreads_book_id for e in queryset])
         return render(request, 'books/user_books.html', {'books':books})
     def view_currently_reading_books(request):
 
         output = User_Book_Currently_Reading.objects.get(user__pk=request.user.pk)
         queryset = output.book.all()
-        books = Book.objects.filter(goodreads_book_id__in = [e.goodreads_book_id for e in queryset])
+        books = Book.objects.filter(goodreads_book_id__in = [e.book.goodreads_book_id for e in queryset])
         return render(request, 'books/user_books.html', {'books':books})
 
     @csrf_exempt
@@ -299,17 +294,65 @@ class User_Book_Data:
         selected_books = request.POST.getlist("selected[]")
         print(selected_books)
 
-        #############################################
-        # Add Logic for sending to custom user model  
-        #############################################
         output = User_Book_Reading.objects.get(user__pk=request.user.pk)
         for id_obj in selected_books:
-
-            book_obj = Book.objects.get(pk=id_obj)
-            print (id_obj,book_obj)
+            try:
+                book_obj = Intermediate_Book.objects.get(user__pk=request.user.pk,pk=id_obj)
+            except:
+                book1 = Book.objects.get(pk=id_obj)
+                book_obj = Intermediate_Book(user = request.user,book=book1,current_page = 0,status = "Read")
+                book_obj.save()
             output.book.add(book_obj)
+            output.save()
+
+            try:
+                output_currently_reading = User_Book_Currently_Reading.objects.get(user__pk=request.user.pk)
+                output_currently_reading.book.remove(book_obj)
+                output_currently_reading.save()
+            except Exception as e:
+                print (str(e))
+            try:
+                output_reading = User_Book_Wishlisted.objects.get(user__pk=request.user.pk)
+                output_reading.book.remove(book_obj)
+                output_reading.save()
+            except Exception as e:
+                print (str(e))
+
 
         return HttpResponseRedirect('/user_books/read_books')
+
+
+    def add_to_wishlist(request,pk,status=False):
+        try:
+            
+            book = Intermediate_Book.objects.get(user__pk=request.user.pk,book__pk=pk)
+        except Exception as e:
+            print (str(e))
+
+            book1 = Book.objects.get(pk=pk)
+            book = Intermediate_Book(user = request.user,book=book1,current_page = 0,status = "To Read")
+
+        book.status = "To Read"
+        book.current_page = 0
+        book.save()
+
+        output = User_Book_Wishlisted.objects.get(user__pk=request.user.pk)
+        output.book.add(book)
+        output.save()
+
+        try:
+            output_currently_reading = User_Book_Currently_Reading.objects.get(user__pk=request.user.pk)
+            output_currently_reading.book.remove(book)
+            output_currently_reading.save()
+        except Exception as e:
+            print (str(e))
+        try:
+            output_reading = User_Book_Reading.objects.get(user__pk=request.user.pk)
+            output_reading.book.remove(book)
+            output_reading.save()
+        except Exception as e:
+            print (str(e))
+        return redirect('about_book', pk=book.pk)
     
     def select_read_books(request):
         books = Book.objects.all()[:500]

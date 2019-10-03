@@ -6,8 +6,8 @@ with open('scripts/output_with_8000_desc_genre.csv') as f:
 	print(next(reader))
 	print ()
 	for row in reader:
-		Book.objects.create(book_id = row[0],
-			goodreads_book_id = row[1],
+		Book.objects.create(goodreads_book_id = row[1],
+			book_id = row[0],
 			published_date = row[8],
 			author = row[7],
 			title = row[10],
@@ -16,8 +16,6 @@ with open('scripts/output_with_8000_desc_genre.csv') as f:
 			description = row[23],
 			image_url = row[21],
 			image_location = row[24],
-			status = "Not Read",
-			genres = row[25],
-			current_page = 0)
+			genres = row[25])
 
 		
