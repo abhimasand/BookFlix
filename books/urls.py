@@ -17,10 +17,15 @@ urlpatterns = [
     #path('all_books/select_user_preferences', views.User_Book_Data.select_user_preferences, name='select_user_preferences'),
     
     path('about_book/<int:pk>', views.Book_Functions.about_book, name='about_book'),
+    path('about_book/<int:pk>/<status>/<current_page>', views.Book_Functions.about_book, name='about_book'),
     path('about_book/<int:pk>/add_to_wishlist', views.Book_Functions.add_to_wishlist, name='add_to_wishlist'),
     path('about_book/<int:pk>/remove_from_wishlist', views.Book_Functions.remove_from_wishlist, name='remove_from_wishlist'),
     path('about_book/<int:pk>/currently_reading', views.Book_Functions.currently_reading, name='currently_reading'),
+    path('about_book/<int:pk>/already_read_book', views.Book_Functions.already_read_book, name='already_read_book'),
+
     path('about_book/<int:pk>/<status>/currently_reading/change_current_page', views.Book_Functions.change_current_page, name='change_current_page'),
+
+    path('redirect_clicked_book/<int:pk>', views.User_Book_Data.redirect_clicked_book, name='redirect_clicked_book'),
 
     path('services', views.Services.services, name='services'),
 

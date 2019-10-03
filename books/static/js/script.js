@@ -33,7 +33,8 @@ submitSelected.onclick = function() {
 		},
 		success: function(data) {
 			console.log("success: ", data);
+			window.location.href = "/user_books/read_books";
 			// Redirect here
 		}
-	});
+	})
 };

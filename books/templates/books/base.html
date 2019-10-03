@@ -74,10 +74,12 @@
 
               <ul class="site-menu js-clone-nav mx-auto d-none d-lg-block">
                 <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'predictions' %}">Recommended Books</a></li>
                 <li><a href="{% url 'all_books' %}">Find Books</a></li>
                 <li><a href="{% url 'search_books' %}">Search Books</a></li>
-                <li><a href="{% url 'view_read_books' %}">Read Books</a></li>
+                {% if user.is_authenticated%}
+                  <li><a href="{% url 'view_read_books' %}">Read Books</a></li>
+                  <li><a href="{% url 'predictions' %}">Recommended Books</a></li>
+                {% endif %}
                 <li><a href="{% url 'services' %}">Services</a></li>
               </ul>
             </nav>

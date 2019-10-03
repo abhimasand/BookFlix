@@ -50,18 +50,18 @@
               {%endif%}
 
 
-              {% ifequal book.status "Read" %}
-              	<p><b>Status: </b><font color="green">{{book.status}}<font></p>
+              {% ifequal status "Read" %}
+              	<p><b>Status: </b><font color="green">{{status}}<font></p>
               {% endifequal %}
-              {% ifequal book.status "Not Read" %}
-              	<p><b>Status: </b><font color="red">{{book.status}}<font></p>
+              {% ifequal status "Not Read" %}
+              	<p><b>Status: </b><font color="red">{{status}}<font></p>
               {% endifequal %}
-              {% ifequal book.status "To Read" %}
-              	<p><b>Status: </b><font color="blue">{{book.status}}<font></p>
+              {% ifequal status "To Read" %}
+              	<p><b>Status: </b><font color="blue">{{status}}<font></p>
               {% endifequal %}
-              {% ifequal book.status "Reading" %}
-                <p><b>Status: </b><font color="purple">{{book.status}}<font></p>
-                <p><b>Current Page: </b>{{book.current_page}}</p>
+              {% ifequal status "Reading" %}
+                <p><b>Status: </b><font color="purple">{{status}}<font></p>
+                <p><b>Current Page: </b>{{current_page}}</p>
               {% endifequal %}
               {% if flag %}
               <form action="{% url 'change_current_page' pk=book.pk status='Change Page' %}" method="get">
@@ -74,13 +74,17 @@
         </div>
         <div class="row mb-3 site-section">
             <div class="col-12 ">
-              {% ifequal book.status "To Read" %}
+
+              {% ifequal status "To Read" %}
+
               <a href = "{% url 'remove_from_wishlist' pk=book.pk %}" b><h1 class="text-center">Remove from Wishlist</h1></a>
               {% else %}
               <a href = "{% url 'add_to_wishlist' pk=book.pk %}" b><h1 class="text-center">Add to Wishlist</h1></a>
+
+
               {% endifequal %}
               <spacer>
-              {% ifequal book.status "Reading" %}
+              {% ifequal status "Reading" %}
                 <a href = "{% url 'currently_reading' pk=book.pk %}" b><h1 class="text-center"><font color="purple">Currently Reading<font></h1></a>
                 <a href = "{% url 'change_current_page' pk=book.pk status='In Progress'%}" b><h4 class="text-center">
                   <font color="purple">
@@ -90,6 +94,18 @@
               {% else %}
                 <a href = "{% url 'currently_reading' pk=book.pk  %}" b><h1 class="text-center">Currently Reading</h1></a>
               {% endifequal %} 
+              <spacer>
+              {% ifequal status "Reading" %}
+                <a href = "{% url 'already_read_book' pk=book.pk %}" b><h1 class="text-center"><font color="purple">Already Read?<font></h1></a>
+                  <font color="purple">
+                    Change Current Page
+                  <font>
+                </h4></a>
+              {% else %}
+                <a href = "{% url 'already_read_book' pk=book.pk  %}" b><h1 class="text-center">Already Read?</h1></a>
+              {% endifequal %} 
+
+
               
             </div>
           </div>

@@ -60,7 +60,7 @@
       <div class="row book-gallery">
         {% for book in books %}
           <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2 item my-3" data-aos="fade" data-src="{{ MEDIA_URL }}{{book.image_location}}" data-sub-html="<h4>{{book.title}}</h4><p>{{book.description}}</p>">
-            <a href="{% url 'about_book' pk=book.pk %}">
+            <a href="{% url 'redirect_clicked_book' pk=book.pk%}">
               <img src="{{ MEDIA_URL }}{{book.image_location}}" alt="IMage" class="img-fluid">
             </a>
           </div>
