@@ -293,6 +293,7 @@ class User_Book_Data:
         queryset = output.book.all()
         books = Book.objects.filter(goodreads_book_id__in = [e.book.goodreads_book_id for e in queryset])
         return render(request, 'books/user_books.html', {'books':books})
+        
     def view_currently_reading_books(request):
 
         output = User_Book_Currently_Reading.objects.get(user__pk=request.user.pk)
@@ -301,12 +302,17 @@ class User_Book_Data:
         return render(request, 'books/user_books.html', {'books':books})
 
     def redirect_clicked_book(request,pk):
-        try:
-            book = Intermediate_Book.objects.get(user__pk=request.user.pk,book__pk=pk)
-        except:
+        if request.user.is_authenticated:
+            try:
+                book = Intermediate_Book.objects.get(user__pk=request.user.pk,book__pk=pk)
+            except:
+                obj = Book.objects.get(pk=pk)
+                book = Intermediate_Book(user = request.user,book=obj,current_page = 0,status = "Not Read")
+            return redirect('about_book', pk=pk,status = book.status,current_page = book.current_page)
+        else:
             obj = Book.objects.get(pk=pk)
-            book = Intermediate_Book(user = request.user,book=obj,current_page = 0,status = "Not Read")
-        return redirect('about_book', pk=pk,status = book.status,current_page = book.current_page)
+            return redirect('about_book', pk=pk,status = "Not Read",current_page = 0)
+
 
 
     @csrf_exempt
