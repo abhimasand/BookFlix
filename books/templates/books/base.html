@@ -1,5 +1,5 @@
 {% load static %}
-
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <title>Photon &mdash; Colorlib Website Template</title>
@@ -61,7 +61,7 @@
 
 
 
-    <header class="site-navbar py-3" role="banner">
+    <header class="site-navbar py-3 border-bottom" role="banner">
 
       <div class="container-fluid">
         <div class="row align-items-center">
@@ -77,7 +77,7 @@
                 <li><a href="{% url 'all_books' %}">Find Books</a></li>
                 <li><a href="{% url 'search_books' %}">Search Books</a></li>
                 {% if user.is_authenticated%}
-                  <li><a href="{% url 'view_read_books' %}">Read Books</a></li>
+                  <li><a href="{% url 'view_user_data' user_data_link='Read' %}">Read Books</a></li>
                   <li><a href="{% url 'predictions' %}">Recommended Books</a></li>
                 {% endif %}
                 <li><a href="{% url 'services' %}">Services</a></li>
@@ -87,16 +87,15 @@
 
           <div class="col-6 col-xl-2 text-right" data-aos="fade-down">
             <div class="d-none d-xl-inline-block">
-              <ul class="site-menu js-clone-nav ml-auto list-unstyled d-flex text-right mb-0" data-class="social">
-                <li>
+              <ul class="site-menu js-clone-nav ml-auto list-unstyled d-flex text-right mb-0" data-class="text">
+                
                   {% if user.is_authenticated%}
-                    <a href="" class="pl-0 pr-3">{{ user.get_username }}</span></a>
-                    <a href="{% url 'logout' %}" class="pl-0 pr-3">Logout</span></a>
+                    <li><a href="" class="pl-0 pr-3">{{ user.get_username }}</span></a></li>
+                    <li><a href="{% url 'logout' %}" class="pl-0 pr-3">Logout</span></a></li>
 
                   {% else %}
-                    <a href="{% url 'login' %}" class="pl-0 pr-3">Login/Register</span></a>
+                    <li><a href="{% url 'login' %}" class="pl-0 pr-3">Login/Register</span></a></li>
                   {% endif %}
-                </li>
 
               </ul>
             </div>

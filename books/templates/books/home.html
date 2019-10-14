@@ -8,7 +8,7 @@
               <div class="image-wrap">
                 <div class="image-info">
                   <h2 class="mb-3">Fiction</h2>
-                  <a href="single.html" class="btn btn-outline-white py-2 px-4">More Photos</a>
+                  <a href="{% url 'sort_books_genre' request_genre='Fiction' %}" class="btn btn-outline-white py-2 px-4">More Photos</a>
                 </div>
                 <img src="{% static 'images/img_1.jpg' %}" alt="Image">
               </div>
@@ -16,8 +16,8 @@
             <div class="swiper-slide">
               <div class="image-wrap">
                 <div class="image-info">
-                  <h2 class="mb-3">Non-Fiction</h2>
-                  <a href="single.html" class="btn btn-outline-white py-2 px-4">More Photos</a>
+                  <h2 class="mb-3">Romance</h2>
+                  <a href="{% url 'sort_books_genre' request_genre='Romance' %}" class="btn btn-outline-white py-2 px-4">More Photos</a>
                 </div>
                 <img src="{% static 'images/img_2.jpg' %}" alt="Image">
               </div>
@@ -25,8 +25,8 @@
             <div class="swiper-slide">
               <div class="image-wrap">
                 <div class="image-info">
-                  <h2 class="mb-3">Horror</h2>
-                  <a href="single.html" class="btn btn-outline-white py-2 px-4">More Photos</a>
+                  <h2 class="mb-3">Non-Fiction</h2>
+                  <a href="{% url 'sort_books_genre' request_genre='Nonfiction' %}" class="btn btn-outline-white py-2 px-4">More Photos</a>
                 </div>
                 <img src="{% static 'images/img_3.jpg' %}" alt="Image">
               </div>
@@ -34,8 +34,17 @@
             <div class="swiper-slide">
               <div class="image-wrap">
                 <div class="image-info">
-                  <h2 class="mb-3">Fantasy</h2>
-                  <a href="single.html" class="btn btn-outline-white py-2 px-4">More Photos</a>
+                  <h2 class="mb-3">Horror</h2>
+                  <a href="{% url 'sort_books_genre' request_genre='Horror' %}" class="btn btn-outline-white py-2 px-4">More Photos</a>
+                </div>
+                <img src="{% static 'images/img_4.jpg' %}" alt="Image">
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="image-wrap">
+                <div class="image-info">
+                  <h2 class="mb-3">Crime</h2>
+                  <a href="{% url 'sort_books_genre' request_genre='Crime' %}" class="btn btn-outline-white py-2 px-4">More Photos</a>
                 </div>
                 <img src="{% static 'images/img_4.jpg' %}" alt="Image">
               </div>

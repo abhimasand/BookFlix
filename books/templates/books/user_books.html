@@ -20,9 +20,9 @@
 
     <div class="row mb-3 site-section">
             <div class="col-12 ">
-              <a href = "{% url 'view_read_books' %}" b><h1 class="text-center">Read Books</h1></a>
-              <a href = "{% url 'view_wishlisted_books' %}" b><h1 class="text-center">Wishlisted Books</h1></a>
-              <a href = "{% url 'view_currently_reading_books' %}" b><h1 class="text-center">Currently Reading Books</h1></a>
+              <a href = "{% url 'view_user_data' user_data_link='Read' %}" b><h1 class="text-center">Read Books</h1></a>
+              <a href = "{% url 'view_user_data' user_data_link='Wishlist' %}" b><h1 class="text-center">Wishlisted Books</h1></a>
+              <a href = "{% url 'view_user_data' user_data_link='Reading' %}" b><h1 class="text-center">Currently Reading Books</h1></a>
             </div>
       </div>
     <div class="row mb-3 site-section">

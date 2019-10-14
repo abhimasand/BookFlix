@@ -10,14 +10,14 @@ from django.contrib import messages
 from django.http import HttpResponse,HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 
-
-import tensorflow as tf
-import keras
 import numpy as np
 import pandas as pd
-from keras.models import Model
-from keras.models import model_from_json
-from keras import backend as K
+
+import tensorflow as tf
+import tensorflow.keras as keras
+from tensorflow.keras import Model
+from tensorflow.keras.models import model_from_json
+from tensorflow.keras import backend as K
 
 import json
 
@@ -26,6 +26,10 @@ genres = ['Fiction', 'Fantasy', 'Romance', 'Young Adult', 'Historical', 'Paranor
 'Religion', 'History', 'Biography', 'Humor', 'Horror', 'Novels', 'Adventure', 'Crime', 'Contemporary Romance', 'Autobiography', 'Philosophy', 
 'War', 'Short Stories', 'Christian', 'Paranormal Romance', 'Vampires', 'Comics', 'Womens Fiction', 'Memoir', 'Chick Lit', 'Erotica', 'Science']
 
+
+dataset = pd.read_csv('scripts/goodbooks-10k-master/ratings.csv')
+book_data = np.array(list(set(dataset.book_id)))
+books_csv = pd.read_csv('scripts/goodbooks-10k-master/books.csv')
 
 
 class Home:
@@ -95,6 +99,7 @@ class Book_Functions:
         book = Book.objects.get(pk=pk)
         return render(request, 'books/about_books.html', {'book':book,'status':status,'current_page':current_page})
 
+
     def add_to_wishlist(request,pk,status=False):
         try:
             book = Intermediate_Book.objects.get(user__pk=request.user.pk,book__pk=pk)
@@ -127,16 +132,6 @@ class Book_Functions:
 
     def remove_from_wishlist(request,pk,status=False):
         book = Intermediate_Book.objects.get(user__pk=request.user.pk,book__pk=pk)
-        # print (book)
-        # book.status = "Not Read"
-        # book.current_page = 0
-        # book.save()
-        # try:
-        #     output = User_Book_Wishlisted.objects.get(user__pk=request.user.pk)
-        #     output.book.remove(book)
-        #     output.save()
-        # except Exception as e:
-        #     print (str(e))
         book.delete()
         
         return redirect('about_book', pk=pk,status = "Not Read",current_page = 0)
@@ -169,10 +164,6 @@ class Book_Functions:
 
     def remove_currently_reading(request,pk,status=False):
         book = Intermediate_Book.objects.get(user__pk=request.user.pk,book__pk=pk)
-        # book.status = "Reading"
-        # book.save()
-        # output = User_Book_Currently_Reading.objects.get(user__pk=request.user.pk)
-        # output.book.remove(book)
         book.delete()
         return redirect('about_book', pk=pk,status = "Not Read",current_page = 0)
 
@@ -222,7 +213,6 @@ class Registration:
     def register(request):
         if request.method == "POST":
             form = UserCreationForm(request.POST)
-            print (form.as_p())
             if form.is_valid():
                 user = form.save()
                 username = form.cleaned_data.get('username')
@@ -235,7 +225,6 @@ class Registration:
                 user_data_3.save()
                 login(request, user)
                 
-                print (user,user_data_1)
                 return redirect("home")
 
             else:
@@ -279,24 +268,15 @@ class Registration:
 
 class User_Book_Data:
 
-    def view_read_books(request):
+    def view_user_data(request,user_data_link):
 
-        output = User_Book_Reading.objects.get(user__pk=request.user.pk)
-        queryset = output.book.all()
-        books = Book.objects.filter(goodreads_book_id__in = [e.book.goodreads_book_id for e in queryset])
-        return render(request, 'books/user_books.html', {'books':books})
-
-    
-    def view_wishlisted_books(request):
-
-        output = User_Book_Wishlisted.objects.get(user__pk=request.user.pk)
-        queryset = output.book.all()
-        books = Book.objects.filter(goodreads_book_id__in = [e.book.goodreads_book_id for e in queryset])
-        return render(request, 'books/user_books.html', {'books':books})
-        
-    def view_currently_reading_books(request):
-
-        output = User_Book_Currently_Reading.objects.get(user__pk=request.user.pk)
+        if user_data_link=="Read":
+            output = User_Book_Reading.objects.get(user__pk=request.user.pk)
+        elif user_data_link=="Wishlist":
+            output = User_Book_Wishlisted.objects.get(user__pk=request.user.pk)
+        elif user_data_link=="Reading":
+            output = User_Book_Currently_Reading.objects.get(user__pk=request.user.pk)
+            
         queryset = output.book.all()
         books = Book.objects.filter(goodreads_book_id__in = [e.book.goodreads_book_id for e in queryset])
         return render(request, 'books/user_books.html', {'books':books})
@@ -354,12 +334,12 @@ class Recommend_Books:
 
     def predictions(request):
 
-        K.clear_session()
+        tf.keras.backend.clear_session()
 
         json_file = open('scripts/model.json', 'r')
         loaded_model_json = json_file.read()
         json_file.close()
-        
+
         loaded_model = model_from_json(loaded_model_json)
         loaded_model.load_weights("scripts/model.h5")
         print("Loaded model from disk")
@@ -374,17 +354,14 @@ class Recommend_Books:
             id_of_book = query.book.book_id
             user_data[int(id_of_book)-1] = 1
 
-        dataset = pd.read_csv('scripts/goodbooks-10k-master/ratings.csv')
-        book_data = np.array(list(set(dataset.book_id)))
-        print (len(book_data),book_data[:10])
-        books = pd.read_csv('scripts/goodbooks-10k-master/books.csv')
+
 
         user = np.array(user_data) #[1,1,0,1,0,0,0......0,1,1]
         predictions = loaded_model.predict([user, book_data])
         predictions = np.array([a[0] for a in predictions])
         recommended_book_ids = (-predictions).argsort()[:100]
 
-        output = books[books['book_id'].isin(recommended_book_ids)]
+        output = books_csv[books_csv['book_id'].isin(recommended_book_ids)]
 
         K.clear_session()
 

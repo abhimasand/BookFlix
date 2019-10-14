@@ -33,7 +33,7 @@ submitSelected.onclick = function() {
 		},
 		success: function(data) {
 			console.log("success: ", data);
-			window.location.href = "/user_books/read_books";
+			window.location.href = "/user_books/view_user_data/Read";
 			// Redirect here
 		}
 	})

@@ -95,12 +95,8 @@
                 <a href = "{% url 'currently_reading' pk=book.pk  %}" b><h1 class="text-center">Currently Reading</h1></a>
               {% endifequal %} 
               <spacer>
-              {% ifequal status "Reading" %}
+              {% ifequal status "Read" %}
                 <a href = "{% url 'already_read_book' pk=book.pk %}" b><h1 class="text-center"><font color="purple">Already Read?<font></h1></a>
-                  <font color="purple">
-                    Change Current Page
-                  <font>
-                </h4></a>
               {% else %}
                 <a href = "{% url 'already_read_book' pk=book.pk  %}" b><h1 class="text-center">Already Read?</h1></a>
               {% endifequal %} 
