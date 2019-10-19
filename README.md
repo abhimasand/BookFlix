@@ -1,5 +1,14 @@
 # Book-Recommendation-System
 
+## Getting Started
+
+```
+python manage.py runserver
+```
+
+
+## License
+
 Copyright (c) 2019 Abhishek Masand
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
