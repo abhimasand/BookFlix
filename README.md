@@ -37,7 +37,6 @@ Find New Books
 
 
 ## Requirements
-::
 
     Python > 3.5
     Tensorflow >= 2.0.0
