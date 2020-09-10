@@ -1,22 +1,53 @@
 # Book-Recommendation-System
 
+## Summary
+
+This project implements AI on top of a classical book management system, and aims to easy the process of picking out books from a wide collection. Picking out book is very difficult, and often takes a lot of time, that time can be better spent in reading the book. BookFlix takes the user's favourite books, and them uses collaborative filtering using Tensorflow, to predict what kind of books from the library are according to the user's preferences. This project thus helps the user maintain the library of books he wants toread, is reading, and also helps him in 'nding the books he could be interested in reading in the future.
+
+Other Features: 
+1. Authentication
+2 .Rating
+3. User Preferences
+4. Virtual Bookmark
+5. Tracking books that have been read by the user
+6. Recommendation Engine
+7. Search 
+
+## Screenshots
+
+Homepage
+
+![Homepage](https://github.com/Mashex/BookFlix/blob/master/media/homepage.png)
+
+Services
+
+![Services](https://github.com/Mashex/BookFlix/blob/master/media/services.png)
+
+Search 
+
+![Search](https://github.com/Mashex/BookFlix/blob/master/media/search.png)
+
+About Book
+
+![About Book](https://github.com/Mashex/BookFlix/blob/master/media/aboutBook.png)
+
+Find New Books
+
+![Find New Books](https://github.com/Mashex/BookFlix/blob/master/media/FindNewBooks.gif)
+
+
+## Requirements
+::
+
+    Python > 3.5
+    Tensorflow >= 2.0.0
+    Django >= 2.2.6
+  
 ## Getting Started
 
 ```python
 python manage.py runserver
 ```
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 Copyright (c) 2019 Abhishek Masand
